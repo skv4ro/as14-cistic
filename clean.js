@@ -3,7 +3,8 @@ import path from "path"
 import { fileURLToPath } from "url"
 
 const OUT_MODES = {
-    WRITE: "write"
+    WRITE: "write",
+    CONSOLE_ONLY: "console_only"
 }
 
 const stdout = (msg, mode) => {
@@ -67,7 +68,7 @@ try {
             const birthTime = new Date(stats.birthtime)
             const before = new Date(now.getTime() - delta)
             if (birthTime < before) {
-                // stdout(`removing file ${file} ${birthTime} ${before}`)
+                stdout(`removing file ${file} ${birthTime} ${before}`, OUT_MODES.CONSOLE_ONLY)
                 fs.rmSync(file, { recursive: true })
             } else {
                 stdout(`keeping file ${file} ${birthTime} ${before}`)

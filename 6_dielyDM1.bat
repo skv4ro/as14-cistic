@@ -1,0 +1,1 @@
+node clean.js "D:\keyence_ljx\6_dielyDM1" 14

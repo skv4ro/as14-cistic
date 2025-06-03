@@ -2,10 +2,15 @@ import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
 
-const stdout = msg => {
+const OUT_MODES = {
+    WRITE: "write"
+}
+
+const stdout = (msg, mode) => {
     console.log(msg)
     try {
-        fs.appendFileSync("stdout.txt", new Date() + process.pid + " " + msg + "\n", "utf8")
+        if (mode === undefined || mode === null || mode === 'append') fs.appendFileSync("stdout.txt", new Date() + process.pid + " " + msg + "\n", "utf8")
+        else if (mode === OUT_MODES.WRITE) fs.writeFileSync("stdout.txt", new Date() + process.pid + " " + msg + "\n", "utf8")
     } catch (e) {
         console.error("FATAL", e)
     }
@@ -53,6 +58,8 @@ if (!days) {
 try {
     const files = fs.readdirSync(parentDir)
     if (files.length < 1) stdout(`directory "${parentDir}" is empty`)
+    let good = 0
+    let bad = 0
     for (const dirName of files) {
         const file = path.join(parentDir, dirName)
         try {
@@ -65,12 +72,14 @@ try {
             } else {
                 stdout(`keeping file ${file} ${birthTime} ${before}`)
             }
+            good++
         } catch (e) {
+            bad++
             stderr("error removing file")
             stderr(e)
         }
     }
-    stdout("process finished")
+    stdout(`process completed with ${good} successfully processed and ${bad} unsuccessfully processed files`, OUT_MODES.WRITE)
 } catch (e) {
     stderr(e)
 }

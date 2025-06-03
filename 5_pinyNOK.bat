@@ -1,0 +1,1 @@
+node clean.js "D:\keyence_ljx\5_pinyNOK" 14

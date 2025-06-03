@@ -1,0 +1,1 @@
+node clean.js "D:\kamery\kam3\VS\Camera\Images" 14
